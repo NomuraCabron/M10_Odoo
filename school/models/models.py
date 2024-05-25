@@ -1,70 +1,61 @@
+# models/models.py
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
+from datetime import date
 from dateutil.relativedelta import relativedelta
 
 class Student(models.Model):
     _name = 'school.student'
     _description = 'Student'
 
-    name = fields.Char(string='First Name', required=True)
-    last_name = fields.Char(string='Last Name', required=True)
-    dni = fields.Char(string='DNI/NIE', required=True, unique=True)
-    birthdate = fields.Date(string='Birthdate', required=True)
-    age = fields.Integer(string='Age', compute='_compute_age', store=True)
-    class_id = fields.Many2one('school.school_class', string='Class')
+    name = fields.Char(string='Nombre', required=True)
+    surname = fields.Char(string='Apellido', required=True)
+    dni = fields.Char(string='DNI/NIE', required=True)
+    birthdate = fields.Date(string='Fecha de Nacimiento')
+    age = fields.Integer(string='Edad', compute='_compute_age', store=True)
 
-    @api.constrains('dni')
-    def _check_unique_dni(self):
-        for record in self:
-            if self.search_count([('dni', '=', record.dni)]) > 1:
-                raise ValidationError('DNI/NIE must be unique.')
+    _sql_constraints = [
+        ('dni_unique', 'unique(dni)', 'DNI/NIE debe ser único.'),
+    ]
 
     @api.depends('birthdate')
     def _compute_age(self):
         for record in self:
             if record.birthdate:
-                today = fields.Date.today()
-                record.age = relativedelta(today, record.birthdate).years
+                record.age = relativedelta(date.today(), record.birthdate).years
+            else:
+                record.age = 0
 
 class SchoolClass(models.Model):
-    _name = 'school.school_class'
+    _name = 'school.class'
     _description = 'School Class'
 
-    name = fields.Char(string='Class Name', required=True)
-    level = fields.Char(string='Level')
-    course = fields.Char(string='Course')
-    start_date = fields.Date(string='Start Date')
-    end_date = fields.Date(string='End Date')
-    student_count = fields.Integer(string='Student Count', compute='_compute_student_count')
-    description = fields.Text(string='Description')
+    name = fields.Char(string='Nombre de la Clase', required=True)
+    level = fields.Char(string='Nivel')
+    course = fields.Char(string='Curso Escolar')
+    start_date = fields.Date(string='Fecha de Inicio')
+    end_date = fields.Date(string='Fecha de Fin')
+    student_count = fields.Integer(string='Cantidad de Estudiantes')
+    description = fields.Text(string='Descripción')
 
-    @api.depends('student_ids')
-    def _compute_student_count(self):
-        for record in self:
-            record.student_count = len(record.student_ids)
-
-    student_ids = fields.One2many('school.student', 'class_id', string='Students')
-
-class SchoolEvent(models.Model):
+class Event(models.Model):
     _name = 'school.event'
-    _description = 'School Event'
+    _description = 'Event'
     _order = 'date'
 
-    date = fields.Date(string='Date', required=True)
     event_type = fields.Selection([
-        ('absence', 'Absence'),
-        ('late', 'Late'),
-        ('behavior', 'Behavior'),
-        ('commendation', 'Commendation'),
-    ], string='Event Type', required=True)
-    description = fields.Text(string='Description')
-    student_ids = fields.Many2many('school.student', string='Students')
-    class_id = fields.Many2one('school.school_class', string='Class')
-    teacher_id = fields.Many2one('hr.employee', string='Teacher')
+        ('absence', 'Absencia'),
+        ('delay', 'Retraso'),
+        ('behavior', 'Comportamiento'),
+        ('commendation', 'Felicitación'),
+    ], string='Tipo de Incidente', required=True)
+    date = fields.Date(string='Fecha', required=True)
+    description = fields.Text(string='Descripción')
+    student_ids = fields.Many2many('school.student', string='Estudiantes')
 
     def name_get(self):
         result = []
         for record in self:
-            name = f"{record.event_type} - {record.class_id.name}"
+            name = f"{record.event_type} - {record.date}"
             result.append((record.id, name))
         return result

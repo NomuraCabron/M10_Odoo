@@ -1,57 +1,63 @@
+<!-- views/event_views.xml -->
 <odoo>
-    <record id="view_school_event_tree" model="ir.ui.view">
-        <field name="name">school.event.tree</field>
-        <field name="model">school.event</field>
-        <field name="arch" type="xml">
-            <tree string="Events">
-                <field name="date"/>
-                <field name="event_type"/>
-                <field name="class_id"/>
-            </tree>
-        </field>
-    </record>
-
-    <record id="view_school_event_form" model="ir.ui.view">
-        <field name="name">school.event.form</field>
+    <record id="view_event_form" model="ir.ui.view">
+        <field name="name">event.form</field>
         <field name="model">school.event</field>
         <field name="arch" type="xml">
             <form string="Event">
-                <group>
-                    <field name="date"/>
-                    <field name="event_type"/>
-                    <field name="description"/>
-                    <field name="student_ids"/>
-                    <field name="class_id"/>
-                    <field name="teacher_id"/>
-                </group>
+                <sheet>
+                    <group>
+                        <field name="event_type"/>
+                        <field name="date"/>
+                        <field name="description"/>
+                        <field name="student_ids"/>
+                    </group>
+                </sheet>
             </form>
         </field>
     </record>
 
-    <record id="view_school_event_calendar" model="ir.ui.view">
-        <field name="name">school.event.calendar</field>
+    <record id="view_event_tree" model="ir.ui.view">
+        <field name="name">event.tree</field>
         <field name="model">school.event</field>
         <field name="arch" type="xml">
-            <calendar string="Events" color="event_type">
-                <field name="date"/>
+            <tree string="Event">
                 <field name="event_type"/>
-                <field name="class_id"/>
+                <field name="date"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_event_calendar" model="ir.ui.view">
+        <field name="name">event.calendar</field>
+        <field name="model">school.event</field>
+        <field name="arch" type="xml">
+            <calendar string="Events" date_start="date">
+                <field name="event_type"/>
+                <field name="description"/>
             </calendar>
         </field>
     </record>
 
-    <record id="view_school_event_search" model="ir.ui.view">
-        <field name="name">school.event.search</field>
+    <record id="view_event_search" model="ir.ui.view">
+        <field name="name">event.search</field>
         <field name="model">school.event</field>
         <field name="arch" type="xml">
-            <search string="Events">
+            <search>
                 <field name="event_type"/>
-                <field name="class_id"/>
-                <group expand="1" string="Group By">
-                    <filter string="Class" domain="[]" context="{'group_by':'class_id'}"/>
-                    <filter string="Type" domain="[]" context="{'group_by':'event_type'}"/>
-                </group>
+                <field name="date"/>
+                <filter string="Group by Type" name="group_by_type" domain="[]" context="{'group_by':'event_type'}"/>
+                <filter string="Group by Date" name="group_by_date" domain="[]" context="{'group_by':'date'}"/>
             </search>
         </field>
+    </record>
+
+    <menuitem id="menu_school_events" name="Events" parent="menu_school_root" action="action_school_events"/>
+
+    <record id="action_school_events" model="ir.actions.act_window">
+        <field name="name">Events</field>
+        <field name="res_model">school.event</field>
+        <field name="view_mode">tree,form,calendar</field>
     </record>
 </odoo>

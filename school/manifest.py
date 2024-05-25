@@ -1,15 +1,19 @@
+# __manifest__.py
 {
     'name': 'School Management',
     'version': '1.0',
-    'summary': 'Manage students, classes, and incidents in a school.',
-    'description': 'Module to manage students, classes, and incidents in a school.',
-    'author': 'Your Name',
-    'depends': ['base', 'hr'],
-    'data': [
-        'views/school_class_views.xml',
-        'views/student_views.xml',
-        'views/school_event_views.xml',
-    ],
-    'installable': True,
-    'application': True,
+    'summary': 'Gestió de l'escola',
+                                  'description': 'Mòdul per gestionar estudiants, classes i incidents en una escola.',
+'category': 'Education',
+'author': 'El teu nom',
+'website': 'https://www.teusite.com',
+'depends': ['base', 'hr'],
+'data': [
+    'views/school_class_views.xml',
+    'views/student_views.xml',
+    'views/event_views.xml',
+    'security/ir.model.access.csv',
+],
+'installable': True,
+'application': True,
 }

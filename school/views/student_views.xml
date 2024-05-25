@@ -1,31 +1,41 @@
+<!-- views/student_views.xml -->
 <odoo>
-    <record id="view_student_tree" model="ir.ui.view">
-        <field name="name">student.tree</field>
-        <field name="model">school.student</field>
-        <field name="arch" type="xml">
-            <tree string="Students">
-                <field name="name"/>
-                <field name="last_name"/>
-                <field name="dni"/>
-                <field name="class_id"/>
-            </tree>
-        </field>
-    </record>
-
     <record id="view_student_form" model="ir.ui.view">
         <field name="name">student.form</field>
         <field name="model">school.student</field>
         <field name="arch" type="xml">
             <form string="Student">
-                <group>
-                    <field name="name"/>
-                    <field name="last_name"/>
-                    <field name="dni"/>
-                    <field name="birthdate"/>
-                    <field name="age"/>
-                    <field name="class_id"/>
-                </group>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="surname"/>
+                        <field name="dni"/>
+                        <field name="birthdate"/>
+                        <field name="age"/>
+                    </group>
+                </sheet>
             </form>
         </field>
+    </record>
+
+    <record id="view_student_tree" model="ir.ui.view">
+        <field name="name">student.tree</field>
+        <field name="model">school.student</field>
+        <field name="arch" type="xml">
+            <tree string="Student">
+                <field name="name"/>
+                <field name="surname"/>
+                <field name="dni"/>
+                <field name="age"/>
+            </tree>
+        </field>
+    </record>
+
+    <menuitem id="menu_school_students" name="Students" parent="menu_school_root" action="action_school_students"/>
+
+    <record id="action_school_students" model="ir.actions.act_window">
+        <field name="name">Students</field>
+        <field name="res_model">school.student</field>
+        <field name="view_mode">tree,form</field>
     </record>
 </odoo>

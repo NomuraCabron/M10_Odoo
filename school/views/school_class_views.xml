@@ -1,30 +1,44 @@
+<!-- views/school_class_views.xml -->
 <odoo>
+    <record id="view_school_class_form" model="ir.ui.view">
+        <field name="name">school.class.form</field>
+        <field name="model">school.class</field>
+        <field name="arch" type="xml">
+            <form string="Class">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="level"/>
+                        <field name="course"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="student_count"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
     <record id="view_school_class_tree" model="ir.ui.view">
         <field name="name">school.class.tree</field>
-        <field name="model">school.school_class</field>
+        <field name="model">school.class</field>
         <field name="arch" type="xml">
-            <tree string="Classes">
+            <tree string="Class">
                 <field name="name"/>
                 <field name="course"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
             </tree>
         </field>
     </record>
 
-    <record id="view_school_class_form" model="ir.ui.view">
-        <field name="name">school.class.form</field>
-        <field name="model">school.school_class</field>
-        <field name="arch" type="xml">
-            <form string="Class">
-                <group>
-                    <field name="name"/>
-                    <field name="level"/>
-                    <field name="course"/>
-                    <field name="start_date"/>
-                    <field name="end_date"/>
-                    <field name="student_count"/>
-                    <field name="description"/>
-                </group>
-            </form>
-        </field>
+    <menuitem id="menu_school_root" name="School" sequence="1"/>
+    <menuitem id="menu_school_classes" name="Classes" parent="menu_school_root" action="action_school_classes"/>
+
+    <record id="action_school_classes" model="ir.actions.act_window">
+        <field name="name">Classes</field>
+        <field name="res_model">school.class</field>
+        <field name="view_mode">tree,form</field>
     </record>
 </odoo>
