@@ -1,0 +1,57 @@
+<odoo>
+    <record id="view_school_event_tree" model="ir.ui.view">
+        <field name="name">school.event.tree</field>
+        <field name="model">school.event</field>
+        <field name="arch" type="xml">
+            <tree string="Events">
+                <field name="date"/>
+                <field name="event_type"/>
+                <field name="class_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_school_event_form" model="ir.ui.view">
+        <field name="name">school.event.form</field>
+        <field name="model">school.event</field>
+        <field name="arch" type="xml">
+            <form string="Event">
+                <group>
+                    <field name="date"/>
+                    <field name="event_type"/>
+                    <field name="description"/>
+                    <field name="student_ids"/>
+                    <field name="class_id"/>
+                    <field name="teacher_id"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_school_event_calendar" model="ir.ui.view">
+        <field name="name">school.event.calendar</field>
+        <field name="model">school.event</field>
+        <field name="arch" type="xml">
+            <calendar string="Events" color="event_type">
+                <field name="date"/>
+                <field name="event_type"/>
+                <field name="class_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_school_event_search" model="ir.ui.view">
+        <field name="name">school.event.search</field>
+        <field name="model">school.event</field>
+        <field name="arch" type="xml">
+            <search string="Events">
+                <field name="event_type"/>
+                <field name="class_id"/>
+                <group expand="1" string="Group By">
+                    <filter string="Class" domain="[]" context="{'group_by':'class_id'}"/>
+                    <filter string="Type" domain="[]" context="{'group_by':'event_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>
